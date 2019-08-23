@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<table class="table animated fadeIn slow mt-5">
+<table *ngIf="!cargando && heroes.length > 0" class="table animated fadeIn slow mt-5">
     <thead class="thead-dark">
         <tr>
             <th scope="col">#</th>
@@ -20,17 +20,27 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-            <td>@mdo</td>
+        <tr *ngFor="let hero of heroes; let i = index">
+            <th scope="row">{{ i + 1}}</th>
+            <td>{{ hero.nombre }}</td>
+            <td>{{ hero.poder }}</td>
+            <td>
+                <label *ngIf="hero.vivo" class="badge badge-success">Vivo</label>
+                <label *ngIf="!hero.vivo" class="badge badge-danger">Muerto</label>
+            </td>
+            <td>
+                <button class="btn btn-info mr-1" [routerLink]="['/heroe', hero.id]">
+                    <i class="fa fa-pen"></i>
+                </button>
+                <button (click)="borrarHeroe(hero, i)" class="btn btn-danger">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </td>
         </tr>
     </tbody>
 </table>
 
-<div class="alert alert-info text-center mt-3">
+<div class="alert alert-info text-center mt-3 animated fadeIn slow" *ngIf="cargando">
     <h4 class="alert-heading">Cargando</h4>
     <p>
         <i class="fa fa-spinner fa-spin fa-2x"></i>
@@ -40,7 +50,7 @@
     </p>
 </div>
 
-<div class="alert alert-warning text-center mt-3">
+<div *ngIf="!cargando && heroes.length === 0" class="alert alert-warning text-center mt-3 animated fadeIn slow">
     <h4 class="alert-heading">No hay resultados</h4>
     <p>
         <i class="fa fa-exclamation fa-2x"></i>
